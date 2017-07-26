@@ -112,3 +112,115 @@ Dentro da pasta src a aplicação estará criada com a seguinte estrutura:
 
     Uma interpolação é a inserção de uma expressão no meio do código HTML. Essa expressão pode ou não usar 
     propriedades e métodos do componente. Expressões interpoladas são delimitadas por chaves duplas {{ e }}.
+
+   Aqui, temos duas expressões interpoladas. Na primeira, interpolamos a propriedade ano. Na segunda, 
+   interpolamos a propriedade autor. Nada nos impede, no entanto, de criar uma única expressão da seguinte 
+   forma:
+    
+   <p><small>© {{ano + ' ' + autor}}</small></p> 
+
+   Podemos manter o valor inicial na declaração, como está, ou podemos defini-lo no construtor da classe. 
+   O construtor é um método chamado constructor() e é executado imediatamente quando um objeto da classe 
+   é criado.
+
+    ======================================================================================
+
+   Os tipos básicos em TypeScript são boolean, number e string. Não há tipos para carateres ou tipos 
+   separados para números inteiros e números reais. 
+
+   Podemos criar vetores das seguintes formas:
+
+    * Vetores - Declarados com tipos
+    let lista: number[] = [1, 2, 3];
+    let lista: Array<number> = [1, 2, 3];
+
+    * Para misturar tipos, usar tuplas
+    let cliente: [string, number] = ['José Couves', 35];
+
+    Em ambos os casos, os itens do vetor ou da tupla são acessados por meio dos índices (iniciados em zero). 
+
+    Um tipo particularmente interessante em TypeScript é a enumeração (iniciada em zero ou com valores atribuídos manualmente). Podemos ter, por exemplo, uma enumeração de prioridades da seguinte forma:
+
+    enum prioridade {Baixa, Média, Alta};
+
+    Os valores nessa enumeração são atribuídos automaticamente, sendo 0 para prioridade.Baixa, 1 para prioridade.Média e 2 para prioridade.Alta.
+
+A atribuição manual poderia ser da seguinte forma (em que os valores são meio óbvios):
+
+enum resultado {Insuficiente=40, Regular=60, Bom=80};
+Em algumas situações, o valor da variável pode ser desconhecido previamente e precisaremos usar um tipo genérico. A solução para isso é o tipo any. Uma variável desse tipo pode assumir qualquer valor, como nestas atribuições:
+
+let desconhecido: any;
+desconhecido = 4; 
+desconhecido = "uma string"; 
+desconhecido = false;
+
+Quando uma função não retorna valor, o tipo a ser usado é void. Veja este exemplo:
+
+function alerta(msg): void {
+  alert(msg);
+}
+Ocasionalmente, precisaremos converter uma valor de um tipo em um valor de outro tipo. Isso já acontece frequentemente, quando concatenamos uma string e um número. Esse número é convertido automaticamente em string. Mas, em TypeScript, podemos fazer essas coersões de tipos explicitamente de duas formas:
+
+let coisa: any = "esta é uma string"; 
+let comprimento: number = (<string>coisa).length;
+
+let coisa: any = "esta é uma string"; 
+let comprimento: number = (coisa as string).length;
+
+=============================================================================================
+
+Uma diretiva é uma estrutura que permite a criação de conteúdo dinâmico. Isso significa que ela 
+pode alterar a página por meio da criação ou remoção de elementos ou por meio da alteração de 
+elementos já existentes. A diretiva que altera a estrutura do documento, criando ou removendo 
+elementos, é chamada de diretiva de estrutura. 
+
+O Angular oferece um conjunto de diretivas de estrutura internas que nos ajudam a construir a página. 
+São as diretivas NgForOf, NgIf e NgSwitch. A diretiva NgForOf é usada para apresentar coleções de dados, 
+como um vetor. 
+A diretiva NgIf é usada para apresentar um elemento apenas se uma determinada condição for satisfeita. 
+A diretiva NgSwitch nos permite escolher um entre vários elementos, a partir de uma outra condição.
+
+
+NgForOf
+A diretiva NgForOf é usada para criarmos elementos a partir de coleções de dados (como um vetor). 
+Elas nos permitem, assim, criar um elemento para cada item da coleção. Veja essa diretiva em uso 
+nessa nova versão do arquivo src/app/tarefas.component.ts:
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'tarefas',
+  template: `
+    <ul>
+      <li *ngFor="let tarefa of tarefas">{{tarefa}}</li>
+    </ul>
+  `
+})
+export class TarefasComponent { 
+
+  tarefas: string[];
+
+  constructor() {
+    this.tarefas = [ 
+      'Comprar leite',
+      'Pagar a conta de luz', 
+      'Consertar a cafeteira'
+    ];
+  }
+
+}
+
+A diretiva NgForOf possui ainda alguns outros valores que podem ser usados nas iterações. 
+Os principais são:
+
+index - Variável numérica que indica o índice (iniciado em zero) do item no vetor.
+first - Variável lógica que indica se este é o primeiro item do vetor.
+last - Variável lógica que indica se este é o último item do vetor.
+even - Variável lógica que indica se este item possui um índice par.
+odd - Variável lógica que indica se este item possui um índice ímpar.
+A instrução a seguir ilustra o uso desses valores:
+
+<li *ngFor="let tarefa of tarefas; index as i">
+  {{i+1}} - {{tarefa}}
+</li>

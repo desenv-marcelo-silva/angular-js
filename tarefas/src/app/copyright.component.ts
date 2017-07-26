@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'copyright',
   template: `
-    <p><small>© {{ano}} {{autor}}</small></p>
+    <p><small>© {{ano + ' ' + autor}}</small></p>
   `,
   styles: [`    
     p {
@@ -12,6 +12,11 @@ import { Component } from '@angular/core';
   `]
 })
 export class CopyrightComponent {
-  ano: number = 2017;
-  autor: string = 'PUC Minas';
+  ano: number;
+  autor: string;
+
+  constructor() {
+    this.ano = 2017;
+    this.autor = 'PUC Minas | Marcelo Silva';
+  }
 }
