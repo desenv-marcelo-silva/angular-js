@@ -46,7 +46,7 @@ export class TarefasComponent {
 
 } */
 
-import { Component } from '@angular/core';
+/* import { Component } from '@angular/core';
 
 @Component({
   selector: 'tarefas',
@@ -85,6 +85,40 @@ export class TarefasComponent {
       'Criar aplicação com Angular'
     ];
     this.grupo = 0;
+  }
+
+} */
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'tarefas',
+  template: `
+    <ul>
+      <li *ngFor="let t of tarefas">{{t.tarefa}} ({{t.prioridade}})</li>
+    </ul>
+  `
+})
+export class TarefasComponent { 
+
+  tarefas: any[];
+
+  constructor() {
+    this.tarefas = [ 
+      { 
+        'tarefa': 'Comprar leite',
+        'prioridade': 1
+      },
+      { 
+        'tarefa': 'Pagar a conta de luz', 
+        'prioridade': 2
+      },
+      {
+        'tarefa': 'Consertar a cafeteira',
+        'prioridade': 3
+      }
+    ];
   }
 
 }

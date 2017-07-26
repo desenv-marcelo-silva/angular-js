@@ -224,3 +224,359 @@ A instrução a seguir ilustra o uso desses valores:
 <li *ngFor="let tarefa of tarefas; index as i">
   {{i+1}} - {{tarefa}}
 </li>
+
+===================================================================================================
+
+TEMPLATES HTML
+
+Podemos, finalmente, explicar o porquê dos asteriscos nessas diretivas. 
+
+A HTML possui um elemento chamado template que, a princípio, não carrega nenhum significado. 
+Seu objetivo é permitir a marcação de um fragmento de página que não será mostrado imediatamente, 
+mas que será usado, em algum momento, por meio de JavaScript. Isso pode ser mostrado por meio do 
+seguinte exemplo:
+
+    <table id="tabela">
+    <thead>
+        <tr>
+        <td>Código</td>
+        <td>Nome</td>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+    </table>
+
+    <template id="produto">
+    <tr>
+        <td class="codprod"></td>
+        <td class="nomeprod></td>
+    </tr>
+    </template>
+
+
+    O template, nesse exemplo, seria usado como modelo para a construção de novas linhas da tabela. 
+    A princípio, ele não faz parte do conteúdo da página. Mas, por meio da JavaScript, podemos 
+    selecionar esse template cujo atributo id tem o valor produto, gerar uma cópia, preencher seus 
+    dados e inseri-lo na tabela.
+
+    O Angular usa um template assim para fazer a inserção ou remoção de elementos no documento HTML. 
+    A única diferença, é que o Angular possui uma implementação própria dos templates, ligeiramente 
+    diferente da especificação da HTML. Esse elemento é o ng-template e é usado quando escrevemos as 
+    diretivas NgFor, NgIf e NgSwitchCase. Os elementos que usam templates são marcados com um *.
+
+    Assim, em Angular, o seguinte código:
+
+    <ul>
+    <li *ngFor="let tarefa of tarefas">{{tarefa}}</li>
+    </ul>
+    
+    equivale a:
+
+    <ul>
+    <ng-template ngFor let-tarefa [ngForOf]="tarefas">
+        <li>{{tarefa}}</li>
+    </ng-template>
+    </ul>
+
+
+    Da mesma forma, o código:
+
+    <p *ngIf="tarefas.length==0">
+    Parabéns, você não tem tarefa pendente!
+    </p>
+
+    equivale a:
+
+    <ng-template [ngIf]="tarefas.length==0">
+    <p>
+        Parabéns, você não tem tarefa pendente!
+    </p>
+    </ng-template>
+    
+    Resumindo, o elemento ng-template encapsula os elementos escritos com diretivas 
+    NgFor, NgIf ou NgSwitchCase, permitindo ao Angular assumir o controle sobre a exibição 
+    ou não desses elementos.
+
+    ======================================================================================
+
+    Diretivas de atributos
+
+    A diretiva que altera o comportamento de um elemento é chamada de diretiva de atributo. 
+    Obviamente, esse termo sugere que o comportamento de um elemento é definido por meio de seus atributos. 
+    Veremos agora como criar atributos dinâmicos.
+
+    Antes de ver isso, porém, vamos lembrar rapidamente o uso de interpolações. Uma interpolação insere, 
+    no template, uma expressão JavaScript. Essa expressão pode usar uma propriedade ou um método do documento. 
+    Por exemplo, poderíamos criar a seguinte interpolação no nosso componente principal, 
+    no arquivo src/app/app.component.ts:
+
+    import { Component } from '@angular/core';
+
+    @Component({
+        selector: 'app-root',
+        template: `
+            <p>{{a+" + "+b}} = {{soma()}}</p>
+        `
+    })
+    
+    export class AppComponent { 
+
+        a: number = 3;
+        b: number = 5;
+
+        soma(): number {
+            return this.a+this.b;
+        }
+    }
+
+    No entanto, a interpolação é usada para criarmos o documento HTML. Esse documento será usado pelo navegador para construir um 
+    objeto que representa esse documento - trata-se de um objeto DOM (document object model). 
+    A partir daí, a nossa interação é com esse objeto.
+
+    Os elementos de um objeto DOM, no entanto, não possuem atributos. Eles possuem propriedades. Assim, quando interagimos com a 
+    página estamos, na verdade, alterando essas propriedades (e não os atributos do documento HTML). 
+    A diferença entre alterar atributos e alterar propriedades é relativamente sutil, mas a interação direta com o objeto é mais eficiente. 
+    Há, também, uma ligeira diferença entre o conjunto de atributos e o conjunto de propriedades dos elementos da página.
+
+    Enfim, veremos agora como fazer exatamente a mesma coisa acima, porém alterando as propriedades do objeto do documento ao invés 
+    dos atributos do código HTML. Para isso, os atributos devem ser delimitados por colchetes.
+
+    import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styles: [ '#logo { float: right; }' ],
+  template: `
+    <div id="logo">
+      <p><img [src]="logo" [width]="largura" /></p>
+    </div>
+  `
+})
+export class AppComponent { 
+  logo: string = '../assets/logo.png';
+  largura: number = 150;
+}          
+
+Como você pode ver na linha 8, as propriedades são delimitadas por colchetes e as expressões não precisam mais ser encaixadas entre chaves. O resultado, nesse exemplo simples, será o mesmo.
+
+A vantagem dessa notação de colchetes é que ela permite operações mais sofisticadas. Por exemplo, a propriedade style de um elemento é usada para o formatarmos. Por meio desse atributo, temos acesso a todas as propriedades de estilo. Ao invés de fazermos uma definição única da propriedade style, podemos fazer isso separadamente para cada propriedade CSS. Veja a nova versão do componente abaixo.
+
+src/app/app.component.ts
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+Copiar
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styles: [ '#logo { float: right; }' ],
+  template: `
+    <div id="logo">
+      <p><img [src]="logo" 
+              [style.width]="largura"
+              [style.margin]="margem" /></p>
+    </div>
+  `
+})
+export class AppComponent { 
+  logo: string = '../assets/logo.png';
+  largura: string = '150px';
+  margem: string = '2em';
+}          
+Nesse código, estamos definindo, separadamente, duas propriedades CSS (linhas 9 e 10). 
+Essas propriedades são as mesmas que usaríamos se as estivéssemos acessando diretamente por meio de JavaScript. 
+Observe que nas linhas 16 e 27 usamos os valores como em regras CSS (strings). Até agora, estávamos definindo a 
+largura da imagem usando um atributo HTML (o que não é uma boa prática).
+
+
+=================================================================================================================
+
+NgStyle
+
+Apesar de ser interessante (e bastante útil) podermos atribuir propriedades CSS separadamente, muitas vezes será melhor fazer por meio de um único comando. Para isso, podemos usar a diretiva embutida NgStyle. Ela deve receber um objeto contendo as diversas propriedades CSS que desejamos formatar. Veja isso na versão do componente abaixo.
+
+src/app/app.component.ts
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+Copiar
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styles: [ '#logo { float: right; }' ],
+  template: `
+    <div id="logo">
+      <p><img [src]="logo" 
+              [ngStyle]="{
+                'width': '150px',
+                'margin': '2em'
+              }" /></p>
+    </div>
+  `
+})
+export class AppComponent { 
+  logo: string = '../assets/logo.png';
+  largura: string = '150px';
+  margem: string = '2em';
+}          
+O problema dessa declaração (linhas 9 a 12) é que estamos inserindo manualmente a formatação de estilos manualmente no template. Podemos fazer isso de forma ligeiramente mais inteligente criando uma função que retorne esse objeto. Veja agora a alternativa abaixo.
+
+src/app/app.component.ts
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+Copiar
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styles: [ '#logo { float: right; }' ],
+  template: `
+    <div id="logo">
+      <p><img [src]="logo" 
+              [ngStyle]="estilosImagem()" /></p>
+    </div>
+  `
+})
+export class AppComponent { 
+  logo: string = '../assets/logo.png';
+  estilosImagem(): any {
+    var estilos = {
+      'width': '150px',
+      'margin': '2em'
+    };
+    return estilos;
+  }
+}
+Entre as linhas 15 a 21, criamos o método estilosImagem() que retorna retorna um objeto que contém as definições de estilo. 
+Na linha 9, vemos que a diretiva ngStyle recebe uma expressão contendo a chamada ao método estilosImagem().
+
+========================================================================================================================
+
+NgClass
+
+Uma outra diretiva embutida do Angular é a NgClass, que nos permite atribuir mais de uma classe a um determinado elemento 
+em uma só operação. Antes disso, vamos ver algumas alternativas. Nós podemos atribuir uma classe a um elemento diretamente 
+por meio da diretivaclass. 
+Observe que as diretivas recebem uma expressão, assim, a string que será atribuída à diretiva não deve ser o nome da classe 
+diretamente, mas uma string interna.
+
+<p [class]="'alerta'">O campo não pode ficar em branco</p>
+Nesse exemplo, o parágrafo receberá a classe alerta. Poderíamos ter associado mais de uma classe ao elemento, apenas 
+incluindo seus nomes na string interna, separados por espaços:
+
+<p [class]="'alerta mensagem'">O campo não pode ficar em branco</p>
+Aqui, o parágrafo receberá duas classes:alerta e mensagem.
+
+Uma alternativa é usarmos um valor lógico para determinar o uso de uma classe. Por exemplo, poderíamos criar o parágrafo 
+abaixo ao qual uma classe alerta seria aplicada apenas se a propriedade erro do componente tiver um valor verdadeiro. 
+Também poderíamos, alternativamente, ter criado um método que retornasse um valor lógico (segundo parágrafo).
+
+<p [class.alerta]="erro">O campo não pode ficar em branco</p>
+<p [class.alerta]="deuErro()">O campo não pode ficar em branco</p>
+
+A diretiva class.alerta associa a classe alerta ao elemento, se ela receber um valor verdadeiro. 
+Podemos fazer isso com qualquer outro nome de classe.
+
+Finalmente, podemos mostrar o uso da diretiva NgClass. Essa diretiva tem um comportamento bem semelhante ao da diretiva class, 
+mas oferece alguns recursos extras. As formas de uso da diretiva NgClass são:
+
+<p [ngClass]="'classe1 classe2'"> ... </p>
+<p [ngClass]="['classe1', 'classe2']"> ... </p>
+<p [ngClass]="{'classe1': true, 'classe2': true, 'classe3': false}"> ... </p>
+<p [ngClass]="{'classe1 classe2': true, 'classe3': false}"> ... </p>
+
+São muitas alternativas, mas as mais interessantes são as duas últimas. Podemos atribuir ou remover um classe de um elemento 
+por meio de um objeto em que cada propriedade corresponde a uma (ou mais) classe que recebe o valor verdadeiro ou falso. 
+Se verdadeiro, a classe é associada. Se falso, a classe é removida. Os valores verdadeiro e falso poderiam ser obtidos por meio 
+de propriedades ou métodos do componente. Veja o exemplo abaixo.
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  styles: [ `
+    #logo { 
+      float: right; 
+    },
+    .tamanhoPequeno {
+      width: 150px;
+      padding: 2em;
+    }
+    .borda {
+      border: thin solid black;
+    }
+  ` ],
+  template: `
+    <div id="logo">
+      <p><img [src]="logo" 
+              [ngClass]="{
+                'tamanho': ehPequeno,
+                'borda': temBorda()
+              }" /></p>
+    </div>
+  `
+})
+export class AppComponent { 
+  logo: string = '../assets/logo.png';
+  ehPequeno = true;
+  temborda() { return true };
+}
+Uma alternativa a esse exemplo seria termos criado um método que retornaria todo o objeto de definição de classes. 
+O resultado seria o mesmo.
+
