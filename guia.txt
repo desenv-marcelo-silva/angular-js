@@ -1,0 +1,85 @@
+Instalando angular via npm:
+    npm install -g @angular/cli
+
+Criar a primeira aplicação:
+    ng new tarefas      <<--- tarefas é o nome da aplicação
+
+Ao criar a aplicação com o angular cli, para iniciar um simples servidor e verificar o funcionamento:
+    ng serve --open     <<--- Isso irá abrir o browser em http://localhost:4200/
+
+A estrutura de pastas criada ficará da seguinte forma:
+
+    tarefas/
+    ├─ e2e/
+    ├─ node_modules/
+    ├─ src/
+    ├─ package.json
+    ├─ .angular-cli.json
+    ├─ .editorconfig
+    ├─ .gitignore
+    ├─ karma.conf.js
+    ├─ protractor.conf.js
+    ├─ README.md
+    ├─ tsconfig.json
+    └─ tslint.json
+
+    Descritos abaixo:
+
+    O diretório e2e (de end-to-end tests) contém recursos para testarmos a aplicação. Não ficam dentro da pasta src, porque se trata de uma outra aplicação (para testar a sua).
+    O diretório node_modules contém todos os pacotes que usaremos, baixados pelo npm. As bibliotecas do Angular também estão instaladas nesse diretório.
+    O diretório src contém o código da nossa aplicação e é onde trabalharemos.
+    O arquivo package.json contém a lista de pacotes usados na sua aplicação.
+    O arquivo .angular-cli.json contém configurações do Angular CLI.
+    O arquivo .editorconfig contém configurações para o seu editor compatível com o padrão (ex.: Visual Studio Code).
+    O arquivo .gitignore contém a lista de arquivos autogerados que não devem ser exportados para o GIT.
+    O arquivo karma.conf.js contém configurações de testes de unidade para o Karma.
+    O arquivo protractor.conf.js contém as configurações do framework Protractor de testes end-to-end.
+    O arquivo README.md contém a documentação básica do projeto para publicação no repositório.
+    O arquivo tsconfig.json contém as configurações do compilador de TypeScript.
+    O arquivo tslint.json contém configurações para análise sintática com o TSLint.
+
+Dentro da pasta src a aplicação estará criada com a seguinte estrutura:
+
+    tarefas/
+    └─ src/
+        ├─ app/
+        ├─ assets/
+        ├─ favicon.ico
+        ├─ index.html
+        ├─ main.ts
+        ├─ styles.css
+        ├─ polyfill.ts
+        ├─ test.ts
+        ├─ tsconfig.app.json
+        ├─ tsconfig.spec.json
+        └─ typings.d.ts
+
+    O diretório app é o principal local da nossa aplicação. Entretanto, podemos distribuir o código por outros diretórios, se assim desejarmos.
+    O diretório assets é um local para recursos diversos como imagens e arquivos de estilos.
+    Os arquivos favicon.ico, index.html e styles.css são aquilo que parecem ser: o ícone, a página principal e uma folha de estilos geral.
+    O arquivo main.ts é responsável pela inicialização da nossa aplicação.
+    O arquivo polyfill.ts oferece o suporte para os diversos tipos de navegadores. Ele normaliza as diferenças entre eles.
+    O arquivo test.ts define o ponto inicial dos testes de unidade.
+    Os arquivos tsconfig.app.json e tsconfig.spec.json contêm as configurações de compilação para a aplicação e para os testes de unidade.
+    O arquivo typings.d.ts contém declarações personalizadas de tipos Typescript.
+
+    O diretório da nossa aplicação, app contém os arquivos criados automaticamente pelo Angular CLI. São eles:
+
+    tarefas/
+    └─ src/
+      └─ app/
+            ├─ app.module.ts
+            ├─ app.component.ts
+            ├─ app.component.html
+            ├─ app.component.css
+            └─ app.component.spec.ts
+
+    Esses são os arquivos principais da nossa aplicação. O arquivo app.component.ts contém o nosso 
+    componente principal, AppComponent, responsável por chamar cada um dos outros. 
+    Os arquivos app.component.html e app.component.css são os arquivos responsáveis pela visão do
+    componente principal e o arquivo app.component.spec.ts é um arquivo usado no teste de unidade 
+    do componente principal (todo arquivo .ts terá o arquivo de teste .spec.ts). 
+    
+    O arquivo app.module.ts contém a estrutura da nossa aplicação, fazendo uma referência para cada 
+    um dos outros recursos.  
+    Neste momento, o único recurso especificado no módulo é o componente principal AppComponent.
