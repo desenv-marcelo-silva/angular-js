@@ -83,3 +83,27 @@ Dentro da pasta src a aplicação estará criada com a seguinte estrutura:
     O arquivo app.module.ts contém a estrutura da nossa aplicação, fazendo uma referência para cada 
     um dos outros recursos.  
     Neste momento, o único recurso especificado no módulo é o componente principal AppComponent.
+
+    =====================================================================================================
+
+    Um componente controla um pedaço da página, chamado de visão. Um componente é apenas uma classe e o 
+    objetivo dessa classe é apenas gerar HTML. Uma página, construida com vários componentes, será montada
+    com a combinação desses componentes.
+
+    Na arquitetura do Angular, um componente controla um pedaço da página web chamado visão. 
+    Os componentes, assim, compõem a interface do usuário com a aplicação web. Criaremos alguns componentes 
+    que nos permitirão gerar e manipular uma lista de tarefas.
+
+    A visão de cada componente é definida por meio de um template. Um template é um trecho de código HTML que 
+    indica ao Angular como apresentar o componente. Um template permite a inserção, no meio do código HTML, 
+    de expressões TypeScript que usem dados do componente.
+
+    Os templates são estruturas dinâmicas. Seus conteúdos podem ser atualizados automaticamente, na medida em 
+    que o usuário interage com a aplicação.  Para criarmos conteúdo dinâmico, precisamos explicar ao Angular 
+    como fazer isso por meio de diretivas. Uma diretiva é uma estrutura que permite a criação de conteúdo dinâmico.
+
+    As diretivas podem ser de estrutura ou de atributos. Uma diretiva de estrutura altera o layout por meio 
+    da criação ou remoção de elementos do DOM. Uma diretiva de atributos altera o comportamento de um elemento 
+    já existente.
+
+    Sob um ponto de vista técnico, um componente também é uma diretiva, já que cria conteúdos dinâmicos.
