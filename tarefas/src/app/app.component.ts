@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
     <h1>Gestão de Tarefas</h1>
     <tarefas></tarefas>
     <rodape></rodape>
+    <copyright></copyright>
   `
 })
 export class AppComponent { }

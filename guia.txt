@@ -107,3 +107,8 @@ Dentro da pasta src a aplicação estará criada com a seguinte estrutura:
     já existente.
 
     Sob um ponto de vista técnico, um componente também é uma diretiva, já que cria conteúdos dinâmicos.
+
+    ===========================================================================
+
+    Uma interpolação é a inserção de uma expressão no meio do código HTML. Essa expressão pode ou não usar 
+    propriedades e métodos do componente. Expressões interpoladas são delimitadas por chaves duplas {{ e }}.
