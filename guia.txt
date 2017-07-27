@@ -580,3 +580,211 @@ export class AppComponent {
 Uma alternativa a esse exemplo seria termos criado um método que retornaria todo o objeto de definição de classes. 
 O resultado seria o mesmo.
 
+=======================================================================================================
+4.5 Filtros
+
+Partindo do princípio de que toda aplicação deve coletar e apresentar dados, é importante que existam mecanismos para facilitar essas duas operações. No caso da apresentação de dados, o Angular nos oferece um mecanismo de formatação bastante simples: os filtros (pipes).
+
+Um filtro recebe um dado e o transforma em outro dado. Podemos usá-los, por exemplo, para transformarmos uma data do tipo Date em uma string formatada de acordo com o padrão de datas do nosso país. Podemos usá-los também para colocarmos todas as letras de uma string em caixa alta ou baixa e para determinarmos o número de casas decimais de um número.
+
+Os filtros são aplicados usados nas interpolações, a partir da seguinte sintaxe:
+
+{{ expressão | filtro }}
+Os filtros podem ser aplicados em cascata:
+
+{{ expressão | filtro1 | filtro2 | ... }}
+Os filtros podem conter parâmetros:
+
+{{ expressão | filtro:argumento1:argumento2:... }}
+
+FILTROS EMBUTIDOS
+
+O Angular nos oferece alguns filtros embutidos, para os tipos básicos de valores. Experimente usar esses filtros nos seu componente principal, como mostrado abaixo:
+
+src/app/app.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+        <p>{{nome | uppercase}}</p>
+        <p>{{nome | lowercase}}</p>
+        <p>{{nome | titlecase}}</p>
+        <p>{{nome | slice:3:6}}</p>
+        <p>{{numero | number:"1.3-3"}}</p>
+        <p>{{numero | percent:"1.1-2"}}</p>
+        <p>{{moeda | currency:"BRL":true:"1.2-2"}}</p>
+        <p>{{data | date:"dd/MM/yyyy"}}</p>
+        <pre>{{objeto | json}}</pre>
+    `
+})
+export class AppComponent {
+    nome: string = 'PUC Minas';
+    numero: number = 0.75;
+    moeda: number = 1020.45;
+    data: Date = new Date(2017,10,25);
+    objeto: any = { login: "josé", senha: "1234"};
+}
+O filtro de texto pode ser usado para mudar os textos para maiúsculas (uppercase), minúsculas (lowercase) ou apenas iniciais 
+maiúsculas (titlecase).
+
+Também podemos usar filtros que recortam ou substituem parte do texto. O filtro slice, no exemplo, retorna a substring do 
+quarto ao sétimo caracteres (lembre-se que os índices começam em 0).
+
+O primeiro filtro numérico é number, que possui como parâmetro uma string do tipo n1.n2-n3, em que n1 é o número de dígitos 
+antes da vírgula, n2 o número mínimo de casas decimais e n3 o número máximo de casas decimais (há um arredondamento quando o 
+número de casas decimais é inferior ao que de fato o número possui).
+
+O segundo filtro numérico é percent, que faz algo semelhante, mas multiplica o valor numérico por 100 e adiciona o símbolo %.
+
+O filtro de moedas, currency, recebe uma indicação da moeda, de acordo com o padrão ISO-4217, um valor lógico que indica se é 
+para usar o prefixo de moedas (ex.: R$, US$, ...) e o parâmetro de número de dígitos. Você verá que os formatos numéricos retornam 
+números no formato americano (posição dos pontos e vírgulas). Nós podemos alterar isso por meio de um filtro personalizado, que 
+veremos adiante.
+
+O filtro de datas, date, permite a formatação de datas em diversos formatos: medium, short, fullDate, longDate, mediumDate, 
+shortDate, mediumTime e shortTime. Podemos também, como no exemplo, criar uma máscara para formatação das datas. 
+Veja mais sobre essa alternativa na documentação do filtro.
+
+Outro filtro embutido é o json, que formata um objeto para apresentação. É interessante colocar a expressão que usar esse filtro 
+dentro de um elemento pre, para que a formatação respeite as quebras de linha e tabulações.
+
+
+==================================================================================================
+
+4.6 - Eventos
+
+Criar um evento:
+  <button (click)="incrementa()">Incrementa</button>
+
+  import { Component } from '@angular/core';
+
+  @Component({
+      selector: 'app-root',
+      template: `
+        <button (click)="incrementa()">Clique aqui.</button>
+        <p>{{n}} cliques.</p>
+      `
+  })
+  export class AppComponent { 
+    n: number = 0;
+    incrementa(): void {
+      this.n++;
+    }
+  }
+
+  Outros Eventos
+  import { Component } from '@angular/core';
+
+  @Component({
+      selector: 'app-root',
+      template: '
+        <div id="box" 
+            (mouseover)="ativa()" 
+            (mouseout)="desativa()"
+            [class.sobre]="ativado">
+        </div>
+      ',
+      styles: [ '
+        #box {
+          width: 150px;
+          height: 150px;
+          border: thin solid black;
+        }
+        .sobre {
+          background-color: red;
+        }
+      ']
+  })
+  export class AppComponent { 
+    ativado: boolean = false;
+    ativa(): void {
+      this.ativado = true;
+    }
+    desativa(): void {
+      this.ativado = false;
+    }
+  }
+
+  Eventos passados como parâmetro = $event
+
+  import { Component } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+      <div id="box" 
+          (mouseover)="ativa()" 
+          (mouseout)="desativa()"
+          (mousemove)="movimenta($event)"
+          [class.sobre]="ativado">
+      </div>
+      <p>Coordenadas: {{coords}}</p>
+    `,
+    styles: [`
+      #box {
+        width: 150px;
+        height: 150px;
+        border: thin solid black;
+      }
+      .sobre {
+        background-color: red;
+      }
+    `]
+})
+export class AppComponent { 
+  ativado: boolean = false;
+  coords: string = '';
+  ativa(): void {
+    this.ativado = true;
+  }
+  desativa(): void {
+    this.ativado = false;
+    this.coords = ''; 
+  }
+  movimenta(e) {
+    this.coords = "("+e.clientX+","+e.clientY+")";
+  }
+}
+
+
+============================================================================
+
+Formulários
+
+** Pegar o valor do input
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+      <p><input id="nome" name="nome" type="text" /></p>
+      <p><button (click)="enviar()">Enviar</button></p>
+      <p>Nome: {{nome}}</p>
+    `
+})
+export class AppComponent { 
+  nome:string = '';
+  enviar(): void {
+    this.nome = (<HTMLInputElement>document.getElementById('nome')).value; <<<--
+  }
+}
+
+** Outra maneira de pegarmos o valor do input
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'app-root',
+    template: `
+      <p><input #n id="nome" name="nome" type="text" /></p>         <<<<--- esse #n é o nome que demos a variável
+      <p><button (click)="enviar(n.value)">Enviar</button></p>      <<<<--- que é utilizado aqui e passa o valor do input
+      <p>Nome: {{nome}}</p>
+    `
+})
+export class AppComponent { 
+  nome:string = '';
+  enviar(n): void {
+    this.nome = n;                                          <<<--- que é lido aqui
+  }
+}

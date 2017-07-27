@@ -1,20 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { TarefasComponent } from './tarefas.component';
-import { RodapeComponent } from './rodape.component';
 import { CopyrightComponent } from './copyright.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TarefasComponent,
-    RodapeComponent,
     CopyrightComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
