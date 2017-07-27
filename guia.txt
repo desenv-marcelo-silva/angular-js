@@ -788,3 +788,52 @@ export class AppComponent {
     this.nome = n;                                          <<<--- que é lido aqui
   }
 }
+
+==========================================================
+
+Estado dos campos do Formulário
+
+Quando criamos uma ligação bidirecional de dados, por meio da diretiva NgModel, estamos fazendo mais do que associar 
+o valor de um campo a uma propriedade do componente. Estamos criando um controle que possui um estado. 
+Na seção anterior, vimos o estado valid desse controle. Nesta seção, veremos os outros estados.
+
+Cada controle criado por meio da diretiva NgModel possui seis possíveis estados. Cada um desses estados possui uma 
+classe CSS automaticamente associada a ele, de acordo com a seguinte tabela:
+
+Descrição do estado	Propriedade do estado	Classe do estado
+O controle foi visitado	touched	ng-touched
+O controle não foi visitado	untouched	ng-untouched
+O valor do controle foi alterado	dirty	ng-dirty
+O valor do controle não foi alterado	pristine	ng-pristine
+O valor do controle é válido	valid	ng-valid
+O valor do controle não é válido	invalid	ng-invalid
+Os dois primeiros estados tratam do controle ter sido ou não visitado. 
+Isso significa ter ocorrido alguma interação com o campo, mesmo que o valor tenha permanecido sem alterações. 
+Os dois estados seguintes estão relacionados a uma possível alteração do valor do campo, considerando o seu valor 
+inicial (do momento da carga do formulário). Os dois últimos estados indicam se o valor do campo atende às regras de 
+validação. 
+Pode parecer meio óbvio, mas, para cada um desses pares de estado, se o valor de uma propriedade é verdadeiro, 
+então o valor da outra é falso. Em outras palavras, se a propriedade dirty for verdadeira, então necessariamente a 
+propriedade pristine é falsa e você não precisa fazer os dois testes.
+
+
+=================================================================================
+
+6 Serviços
+Serviços, em Angular, são todas as classes que não estão relacionadas à visão (que é o trabalho dos componentes e das diretivas). 
+
+Um dos exemplos mais tradicionais serviços é a recuperação de dados em um servidor, mas, objetivamente, qualquer operação não 
+relacionada à visão deve ser criada como serviço. Um serviço, assim, não deve ter um template. 
+Podemos usar serviços para processarmos registrarmos os logs de acesso, para manipularmos dados, para trocarmos mensagens entre 
+componentes, para fazermos cálculos, para fazermos configurações da aplicação, para comunicação online e muito mais.
+
+Quando transferimos todas essas operações para os serviços, deixamos os componentes mais limpos e cuidando apenas da interação 
+com o usuário. Isso também facilita a atualização da interface sem interferência em classes relacionadas à "lógica do negócio".
+
+Nas próximas seções, veremos como criar dois serviços. Um para gerenciar projetos e outro para gerenciar as tarefas desses projetos.
+
+Os projetos terão apenas dois atributos: codigo e projeto. O codigo será apenas um identificador do projeto e o projeto será o 
+nome do projeto propriamente dito.
+
+As tarefas terão mais atributos. Cada uma delas terá também um codigo, uma descrição da tarefa, uma data de conclusão da tarefa 
+e uma prioridade (número entre 1 e 3).

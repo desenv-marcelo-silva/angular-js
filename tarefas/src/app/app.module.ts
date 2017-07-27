@@ -5,11 +5,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { TarefasComponent } from './tarefas.component';
 import { CopyrightComponent } from './copyright.component';
+import { TarefaComponent } from './tarefa.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TarefasComponent,
+    TarefaComponent,
     CopyrightComponent
   ],
   imports: [
