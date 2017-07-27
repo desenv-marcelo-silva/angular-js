@@ -91,34 +91,25 @@ export class TarefasComponent {
 
 
 import { Component } from '@angular/core';
+import { Tarefa, TarefasService } from './tarefas.service';
 
 @Component({
   selector: 'tarefas',
   template: `
     <ul>
-      <li *ngFor="let t of tarefas">{{t.tarefa}} ({{t.prioridade}})</li>
+      <li *ngFor="let t of tarefas">
+        {{t.tarefa}}
+        (Projeto {{t.codigoprojeto}} - {{t.data|date:'dd/MM'}} - Prioridade {{t.prioridade}})
+    </li>
     </ul>
   `
 })
 export class TarefasComponent { 
 
-  tarefas: any[];
+  tarefas: Tarefa[] = [];
 
-  constructor() {
-    this.tarefas = [ 
-      { 
-        'tarefa': 'Comprar leite',
-        'prioridade': 1
-      },
-      { 
-        'tarefa': 'Pagar a conta de luz', 
-        'prioridade': 2
-      },
-      {
-        'tarefa': 'Consertar a cafeteira',
-        'prioridade': 3
-      }
-    ];
+  constructor(public ts: TarefasService) {
+    this.tarefas = ts.getTarefas();
   }
 
 }

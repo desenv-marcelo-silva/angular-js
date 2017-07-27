@@ -837,3 +837,67 @@ nome do projeto propriamente dito.
 
 As tarefas terão mais atributos. Cada uma delas terá também um codigo, uma descrição da tarefa, uma data de conclusão da tarefa 
 e uma prioridade (número entre 1 e 3).
+
+
+===============================================================
+
+6.2 Injeção de Dependências
+
+A injeção de dependências é uma forma de se oferecer uma instância de uma classe para outra, reduzindo a amarração entre os 
+códigos das duas classes, o que facilita bastante a sua manutenção.
+
+Acima de tudo, a injeção de dependências é um padrão de projeto (obrigatório em Angular). 
+Veja, por exemplo, como seria uma criação típica de objetos em TypeScript sem a injeção de dependências:
+
+export class TarefasComponent {
+
+  public ts: TarefasService;
+
+  constructor() {
+    this.ts = new TarefasService();
+  }
+
+}
+
+
+Esse código coloca a criação do objeto TarefasService dentro do construtor da classe TarefasComponent. 
+Isso torna essa classe mais complexa e difícil de testar. O melhor seria retirar essa criação do serviço de tarefas 
+de dentro da classe TarefasComponent e fazer com que ela receba esse objeto já pronto para uso, após ter sido criado 
+em algum outro lugar (que não deve ser da nossa preocupação, neste momento).
+
+A injeção de dependências faz basicamente isso, criar um mecanismo em que essas dependências de outros objetos sejam 
+resolvidas automaticamente. Quando forem criados, de alguma forma, os objetos são injetados no construtor da classe 
+que precisa deles. Assim, o código poderia ser reescrito para ficar como:
+
+export class TarefasComponent {
+
+  constructor(public ts: TarefasService) { }
+
+}
+
+O que está acontecendo aqui é que o objeto ts do tipo TarefasService é criada em algum lugar e passado como parâmetro 
+para o construtor da classe TarefasComponent.
+
+Esse código apenas tem um detalhe extra. Quando associamos os modificadores de acesso public ou private a um parâmetro 
+do construtor, estamos tornando esse parâmetro uma propriedade da classe. Em outras palavras, esse código tem exatamente 
+o mesmo comportamento que esse próximo:
+
+export class TarefasComponent {
+
+  public ts: TarefasService;
+
+  constructor(ts: TarefasService) {
+    this.ts = ts;
+  }
+}
+A única diferença, como você pode perceber, é que o código anterior é mais limpo. Em ambos os casos, o objeto 
+this.ts estará disponível para os outros métodos.
+
+
+PROVIDERS
+
+Antes de passarmos ao próximo assunto, ainda há dois outros ajustes necessários para que um objeto possa ser 
+injetado em uma classe. O primeiro é transformá-lo em um objeto do tipo Injectable. 
+Fizemos isso na seção anterior, quando aplicamos o decorator Injectable às classes TarefasService e ProjetosService. 
+A segunda operação é incluir esses serviços no módulo da aplicação, para que a aplicação os reconheças e saiba onde localizá-los.
+
