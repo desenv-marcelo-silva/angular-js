@@ -901,3 +901,119 @@ injetado em uma classe. O primeiro é transformá-lo em um objeto do tipo Inject
 Fizemos isso na seção anterior, quando aplicamos o decorator Injectable às classes TarefasService e ProjetosService. 
 A segunda operação é incluir esses serviços no módulo da aplicação, para que a aplicação os reconheças e saiba onde localizá-los.
 
+
+===============================================================================================
+
+7 Roteamento
+Até o momento, colocamos nossos dois componentes dentro do template do componente principal, por meio de seus elementos. 
+Precisamos, porém, de um sistema de navegação para que possamos mostrar um ou outro componente, de acordo com a necessidade.
+
+Esse sistema de navegação é chamado, em Angular, de roteamento. Quem cuida dessa operação é um objeto chamado Router. 
+De uma forma bem básica, o que esse roteador faz é definir qual componente deve ser apresentado a partir do URL informado 
+no navegador (seja por meio de digitação, seja por meio da navegação por um link).
+
+Note que, no caso de uma aplicação de página única, como a que estamos desenvolvendo, só há uma página, que é a página principal. 
+Mas essa página permite a exibição de qualquer combinação de componentes. E quem determinará o(s) componente(s) a ser(em) 
+exibido(s) é o Router.
+
+A única regra obrigatória para que o Router funcione é a definição do diretório de referência para os URLs relativos. 
+Fazemos isso por meio da seguinte declaração no cabeçalho do arquivo index.html:
+
+<base href="/" />
+
+Nós definimos as rotas da nossa aplicação na declaração do módulo, isto é, no arquivo src/app/app.module.ts. As rotas são declaradas como um objeto da classe Routes e inseridas no módulo por meio do método RouteModule.forRoot(). Essas duas classes fazem parte da biblioteca @angular/router.
+
+Uma rota é composta por pelo menos as seguintes duas propriedades:
+
+path - Caminho a ser usado no URL e que será associado a um componente;
+component - Componente associado a esse caminho.
+Assim, podemos criar as seguintes rotas para os nossos dois componentes:
+
+const rotas: Routes = [
+  {path: 'projetos',  component: ProjetosComponent},
+  {path: 'tarefas',   component: TarefasComponent}
+];
+Essas rotas serão, respectivamente, associadas aos URLs:
+
+/projetos
+/tarefas
+Podemos criar ainda alguns outros tipos de rotas. Por exemplo, suponha que precisemos de uma rota para um projeto específico de código 3 ou para a tarefa de código 7. Nesses casos, teremos os seguintes URLs:
+
+/projetos/3
+/tarefas/7
+Esses URLs não serão atendidos pelas rotas acima. Também não é possível criar uma rota específica para cada código de projeto ou tarefa por razões óbvias. Assim, precisamos encaixar uma espécie de variável na rota. Fazemos isso da seguinte forma:
+
+const rotas: Routes = [
+  {path: 'projetos',     component: ProjetosComponent},
+  {path: 'tarefas',      component: TarefasComponent}
+  {path: 'projetos/:id', component: ProjetoComponent}
+  {path: 'tarefas/:id',  component: TarefaComponent}
+];
+Observe que estamos indicando outros dois componentes para cuidar dessas novas rotas. Esses componentes apresentarão um projeto e uma tarefa específicas, que será determinada a partir do :id extraído do URL. Veremos, adiante, como fazer isso. Por enquanto, nos concentraremos na criação das rotas.
+
+Há mais três aspectos interessantes sobre as rotas. O primeiro deles é que podemos associar dados estáticos a uma rota. Podemos usar isso de acordo com a conveniência. Por exemplo, podemos criar um título para a página:
+
+const rotas: Routes = [
+  {
+    path: 'projetos', 
+    component: ProjetosComponent,
+    data: { titulo: 'lista de projetos'}
+  }
+];
+Podemos também criar uma rota inicial, isto é, quando o URL não tiver nenhum caminho especial. Para isso, usamos uma string vazia, como no seguinte exemplo:
+
+const rotas: Routes = [
+  {
+    path: '', 
+    redirectTo: '/projetos',
+    pathMatch: 'full'
+  }
+];
+A propriedade redirectTo indica qual rota deve ser seguida nesse caso. Assim, o caminho / será automaticamente substituído pelo caminho /projetos. A propriedade pathMatch estabelece que a comparação dos caminhos deve ser completa. Caso contrário qualquer rota poderia ser equivalente a uma string vazia.
+
+Finalmente, podemos criar uma rota para URLs inválidos. Para isso, usamos o caminho ** que funciona como um curinga. Então, basta criarmos um componente que apresente uma página vazia (uma página 404). O exemplo abaixo ilustra isso:
+
+const rotas: Routes = [
+  {
+    path: '**', 
+    component: PaginaInvalidaComponent
+  }
+];
+
+=======================================================================================================================
+
+Para que possamos ver o sistema de roteamento funcionando, precisamos definir o ponto do template do componente principal 
+em que os componentes serão inseridos. De uma forma geral, isso funciona como se estivéssemos inserindo um componente qualquer.
+
+Por exemplo, para inserirmos o componente de projetos no componente principal, acrescentamos o seguinte elemento ao seu template:
+
+<projetos></projetos>
+O sistema de roteamento, no entanto, escolhe um elemento diferente para apresentação a cada momento, de acordo com o URL 
+informado no navegador. Portanto, não podemos fazer uma inserção direta de um componente como acima. 
+Precisamos de um outro recurso que identifique o componente ativo no sistema de roteamento. 
+Para isso, usamos o seguinte elemento no template:
+
+<router-outlet></router-outlet>
+Antes de inserirmos esse elemento no template, vamos ver como podemos criar links usando o sistema de roteamento. 
+
+Um link tradicional poderia ser criado da seguinte forma:
+
+<a href="/projetos">Projetos</a>
+O problema desse formato de link é que ele força a recarga da aplicação 
+(experimente inseri-lo no template do componente principal). 
+Uma aplicação web de página única, como as que o Angular nos permite criar, não deve recarregar a página. 
+Tudo deve acontecer por meio da troca de conteúdo (usando AJAX). 
+Assim, vamos usar uma outra forma de criar links. Usaremos a diretiva routerLink, como abaixo:
+
+<h1>Gestão de Tarefas</h1>
+<nav>
+  <a routerLink="/tarefas" routerLinkActive="ativo">Tarefas</a>
+  <a routerLink="/projetos" routerLinkActive="ativo">Projetos</a>
+</nav>
+<router-outlet></router-outlet>
+<copyright></copyright>
+A diretiva routerLink funciona exatamente como o atributo href. A diferença é que a carga será feita por meio de AJAX.
+
+Observe que os links possuem uma outra diretiva: routerLinkActive. 
+Essa diretiva permite que associemos uma classe ao link ativo (e apenas a ele). 
+Assim, podemos formatar o link ativo de uma forma especial.

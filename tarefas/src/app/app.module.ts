@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { TarefasComponent } from './tarefas.component';
@@ -9,6 +10,14 @@ import { ProjetosComponent } from './projetos.component';
 import { CopyrightComponent } from './copyright.component';
 import { TarefasService } from './tarefas.service';
 import { ProjetosService } from './projetos.service';
+import { PaginaInvalidaComponent } from './paginainvalida.component';
+
+const rotas: Routes = [
+  {path: 'projetos', component: ProjetosComponent},
+  {path: 'tarefas', component: TarefasComponent},
+  {path: '', redirectTo: '/tarefas', pathMatch: 'full'},
+  {path: '**', component: PaginaInvalidaComponent}
+];
 
 @NgModule({
   declarations: [
@@ -16,11 +25,13 @@ import { ProjetosService } from './projetos.service';
     TarefasComponent,
     TarefaComponent,
     ProjetosComponent,
-    CopyrightComponent
+    CopyrightComponent,
+    PaginaInvalidaComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot(rotas)
   ],
   providers: [
     TarefasService,
